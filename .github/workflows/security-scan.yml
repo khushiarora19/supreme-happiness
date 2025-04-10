@@ -10,24 +10,34 @@ jobs:
   security-scan:
     runs-on: ubuntu-latest
     steps:
-    # Step 1: Checkout the code
-    - name: Checkout code
-      uses: actions/checkout@v3
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    # Step 2: Set up Node.js environment (if your project uses Node.js; adapt for other environments)
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'
+      # Step 2: Ensure the correct working directory
+      - name: Verify directory structure
+        run: ls -R
 
-    # Step 3: Install dependencies
-    - name: Install dependencies
-      run: npm install
+      # Step 3: Navigate to the correct directory (if project files are in a subdirectory)
+      # Uncomment and replace <subdirectory> if needed
+      # - name: Navigate to subdirectory
+      #   run: cd <subdirectory>
 
-    # Step 4: Run Snyk to check for vulnerabilities
-    - name: Run Snyk Security Scan
-      uses: snyk/actions@master
-      with:
-        args: test
-      env:
-        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      # Step 4: Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # Step 5: Install dependencies
+      - name: Install dependencies
+        run: npm install
+        working-directory: . # Update this if your `package.json` is not in the root directory
+
+      # Step 6: Run Snyk Security Scan
+      - name: Run Snyk Security Scan
+        uses: snyk/actions@master
+        with:
+          args: test
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
