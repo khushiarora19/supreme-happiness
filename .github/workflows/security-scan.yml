@@ -26,7 +26,7 @@ jobs:
 
     # Step 4: Run Snyk to check for vulnerabilities
     - name: Run Snyk Security Scan
-      uses: snyk/actions@v3
+      uses: snyk/actions@master
       with:
         args: test
       env:
